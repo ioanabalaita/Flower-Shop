@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Orders - Peony Flower Shop</title>
+    <link rel="stylesheet" th:href="@{/css/theme.css}">
+</head>
+<body>
+<div class="container">
+    <div class="header-actions">
+        <h1>Order History</h1>
+        <a th:href="@{/shop}" class="btn">Back to Catalog</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(orders)}" style="text-align: center; padding: 40px; color: #777;">
+        <p>You haven't placed any orders yet.</p>
+    </div>
+
+    <div th:each="order : ${orders}" style="background: #fffafb; border: 1px solid #f0cdd6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #fae6ec; padding-bottom: 10px; margin-bottom: 15px;">
+            <div>
+                <strong>Order #<span th:text="${order.id}"></span></strong>
+                <span style="color: #777; margin-left: 10px;" th:text="${#temporals.format(order.orderDate, 'dd-MM-yyyy HH:mm')}"></span>
+            </div>
+            <div>
+                <span th:text="${order.status}" style="background: #f0cdd6; color: #333; padding: 4px 10px; border-radius: 12px; font-size: 0.85em; font-weight: 600;"></span>
+            </div>
+        </div>
+
+        <p style="margin: 0 0 10px 0; color: #555;"><strong>Delivery Address:</strong> <span th:text="${order.deliveryAddress}"></span></p>
+
+        <ul style="padding-left: 20px; margin: 10px 0;">
+            <li th:each="item : ${order.items}" style="margin-bottom: 6px;">
+                <span th:text="${item.quantity + 'x ' + item.itemName + ' (' + item.subtotal + ' RON)'}"></span>
+                <div th:if="${item.customDetails != null}" th:text="${item.customDetails}" style="font-size: 0.85em; color: #666;"></div>
+            </li>
+        </ul>
+
+        <p style="text-align: right; font-size: 1.1em; font-weight: 600; margin: 10px 0 0 0;">
+            Total: <span th:text="${order.totalPrice + ' RON'}"></span>
+        </p>
+    </div>
+</div>
+</body>
+</html>

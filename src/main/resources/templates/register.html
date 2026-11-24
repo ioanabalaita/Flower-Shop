@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register - Flower Shop</title>
+    <link rel="stylesheet" th:href="@{/css/theme.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+</head>
+<body>
+<div class="auth-wrapper">
+    <div class="auth-split-card">
+
+        <div class="auth-image-side"></div>
+
+        <div class="auth-form-side">
+            <h1>Sign Up</h1>
+
+            <form th:action="@{/register}" th:object="${user}" method="post">
+                <label>Username:</label>
+                <input type="text" th:field="*{username}" required autocomplete="off" />
+
+                <label>Password:</label>
+                <input type="password" th:field="*{password}" required />
+
+                <button type="submit" class="btn-solid" style="margin-top: 20px;">CREATE ACCOUNT</button>
+            </form>
+
+            <hr>
+
+            <div style="text-align: center;">
+                <p style="margin-bottom: 10px; font-size: 0.9em; color: #555;">Already have an account?</p>
+                <a th:href="@{/login}" class="btn-outline">SIGN IN</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

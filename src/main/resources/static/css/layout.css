@@ -1,0 +1,64 @@
+
+input, button, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.hero-section {
+    height: 80vh;
+    background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('../images/peonies.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    padding: 20px;
+}
+
+
+.about-section {
+    background-color: var(--bg-pink);
+    padding: 80px 20px;
+}
+
+.about-section p {
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+.categories-section {
+    background-color: var(--white);
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 coloane pe desktop */
+    gap: 30px;
+}
+
+@media (max-width: 900px) {
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .hero-content h1 { font-size: 3rem; }
+}
+
+@media (max-width: 600px) {
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+    .hero-content h1 { font-size: 2.5rem; }
+    .container { padding: 40px 15px; }
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shopping Cart - Peony Flower Shop</title>
+    <link rel="stylesheet" th:href="@{/css/theme.css}">
+</head>
+<body>
+<div class="container">
+    <div class="header-actions">
+        <h1>Shopping Cart</h1>
+        <a th:href="@{/shop}" class="btn">Continue Shopping</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(cartItems)}" style="text-align: center; padding: 40px; color: #777;">
+        <p>Your cart is currently empty.</p>
+        <a th:href="@{/shop}" class="btn" style="margin-top: 10px; display: inline-block;">Browse Flowers</a>
+    </div>
+
+    <div th:if="${!#lists.isEmpty(cartItems)}">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${cartItems}">
+                    <td>
+                        <strong th:text="${item.displayName}"></strong>
+                        <div th:if="${item.customDetails != null}" th:text="${item.customDetails}" style="font-size: 0.85em; color: #666; margin-top: 4px;"></div>
+                    </td>
+                    <td th:text="${item.unitPrice + ' RON'}"></td>
+                    <td>
+                        <form th:action="@{/cart/update/{id}(id=${item.id})}" method="post" style="display: flex; gap: 6px; align-items: center; margin: 0;">
+                            <input type="number" name="quantity" th:value="${item.quantity}" min="1" style="width: 65px; padding: 5px;">
+                            <button type="submit" class="btn" style="padding: 6px 10px; font-size: 0.85em;">Update</button>
+                        </form>
+                    </td>
+                    <td th:text="${item.subtotal + ' RON'}"></td>
+                    <td>
+                        <form th:action="@{/cart/remove/{id}(id=${item.id})}" method="post" style="margin: 0;">
+                            <button type="submit" class="btn" style="background-color: #d32f2f; padding: 6px 12px; font-size: 0.85em;">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 30px; padding: 25px; background: #fffafb; border: 1px solid #f0cdd6; border-radius: 8px;">
+            <h2 style="margin-top: 0;">Total: <span th:text="${totalPrice + ' RON'}"></span></h2>
+
+            <form th:action="@{/orders/checkout}" method="post" style="display: flex; flex-direction: column; gap: 15px; max-width: 500px;">
+                <div>
+                    <label>Delivery Address:</label><br>
+                    <input type="text" name="deliveryAddress" required placeholder="Street, Number, City"
+                           style="width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #f0cdd6; border-radius: 4px;">
+                </div>
+                <button type="submit" class="btn" style="align-self: flex-start;">Place Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

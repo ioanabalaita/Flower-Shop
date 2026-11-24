@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Catalog - Peony Flower Shop</title>
+    <link rel="stylesheet" th:href="@{/css/theme.css}">
+</head>
+<body>
+<div class="container">
+    <div class="header-actions">
+        <h1>Flower Catalog</h1>
+        <a th:href="@{/}" class="btn">Back to Home</a>
+    </div>
+
+
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px;">
+        <a th:href="@{/shop}" class="btn"
+           th:style="${selectedCategory == 'All'} ? 'background-color: #bf7186;' : 'background-color: #f0cdd6; color: #333;'">All</a>
+        <a th:href="@{/shop(category='Single Stem')}" class="btn"
+           th:style="${selectedCategory == 'Single Stem'} ? 'background-color: #bf7186;' : 'background-color: #f0cdd6; color: #333;'">Single Stem</a>
+        <a th:href="@{/shop(category='Bouquet')}" class="btn"
+           th:style="${selectedCategory == 'Bouquet'} ? 'background-color: #bf7186;' : 'background-color: #f0cdd6; color: #333;'">Bouquets</a>
+        <a th:href="@{/shop(category='Floral Arrangement')}" class="btn"
+           th:style="${selectedCategory == 'Floral Arrangement'} ? 'background-color: #bf7186;' : 'background-color: #f0cdd6; color: #333;'">Floral Arrangements</a>
+    </div>
+
+
+    <div th:if="${#lists.isEmpty(flowers)}" style="text-align: center; padding: 40px; color: #777;">
+        <p>No flowers available in this category yet.</p>
+    </div>
+
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px;">
+        <div th:each="flower : ${flowers}" style="background: #fffafb; border: 1px solid #f0cdd6; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+            <img th:src="${flower.imageUrl != null && !flower.imageUrl.isBlank()} ? ${flower.imageUrl} : @{/images/peonies.jpg}"
+                 alt="Flower image"
+                 style="width: 100%; height: 200px; object-fit: cover;">
+
+            <div style="padding: 18px; display: flex; flex-direction: column; flex-grow: 1;">
+                <span th:text="${flower.category}" style="font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; color: #c97a8e; margin-bottom: 5px;"></span>
+                <h3 th:text="${flower.name}" style="margin: 0 0 8px 0;"></h3>
+                <p th:text="${flower.price + ' RON'}" style="font-weight: 600; color: #333; margin: 0 0 10px 0;"></p>
+                <p th:text="${flower.stockQuantity > 0} ? 'In stock (' + ${flower.stockQuantity} + ')' : 'Out of stock'"
+                   th:style="${flower.stockQuantity > 0} ? 'color: #2e7d32; font-size: 0.85em;' : 'color: #c62828; font-size: 0.85em;'"></p>
+
+                <div style="margin-top: auto; padding-top: 15px;">
+                    <a th:href="@{/shop/{id}(id=${flower.id})}" class="btn" style="display: block; text-align: center;">View Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

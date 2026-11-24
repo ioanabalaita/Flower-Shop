@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Orders - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/theme.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+</head>
+<body>
+<div class="container">
+    <div class="header-actions">
+        <h1>Order Management (Admin)</h1>
+        <div style="display: flex; gap: 10px;">
+            <a th:href="@{/flowers}" class="btn btn-outline">Inventory</a>
+            <a th:href="@{/}" class="btn">Back to Home</a>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(orders)}" style="text-align: center; padding: 40px; color: #777;">
+        <p>No orders have been placed yet.</p>
+    </div>
+
+    <div th:each="order : ${orders}" style="background: #fffafb; border: 1px solid #f0cdd6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; border-bottom: 1px solid #fae6ec; padding-bottom: 12px; margin-bottom: 15px;">
+            <div>
+                <strong>Order #<span th:text="${order.id}"></span></strong>
+                <span style="color: #c97a8e; font-weight: 600; margin-left: 10px;" th:text="'Customer: ' + ${order.user.username}"></span>
+                <span style="color: #777; margin-left: 10px;" th:text="${#temporals.format(order.orderDate, 'dd-MM-yyyy HH:mm')}"></span>
+            </div>
+
+            <form th:action="@{/admin/orders/{id}/status(id=${order.id})}" method="post" style="display: flex; gap: 8px; align-items: center; margin: 0;">
+                <select name="status" style="padding: 7px 10px; border: 1px solid #f0cdd6; border-radius: 4px; background: white; font-family: inherit;">
+                    <option value="PENDING" th:selected="${order.status == 'PENDING'}">PENDING</option>
+                    <option value="IN_PREPARATION" th:selected="${order.status == 'IN_PREPARATION'}">IN_PREPARATION</option>
+                    <option value="DELIVERED" th:selected="${order.status == 'DELIVERED'}">DELIVERED</option>
+                    <option value="CANCELLED" th:selected="${order.status == 'CANCELLED'}">CANCELLED</option>
+                </select>
+                <button type="submit" class="btn" style="padding: 7px 14px; font-size: 0.85em;">Update</button>
+            </form>
+        </div>
+
+        <p style="margin: 0 0 10px 0; color: #555;">
+            <strong>Delivery Address:</strong> <span th:text="${order.deliveryAddress}"></span>
+        </p>
+
+        <ul style="padding-left: 20px; margin: 10px 0;">
+            <li th:each="item : ${order.items}" style="margin-bottom: 6px;">
+                <span th:text="${item.quantity + 'x ' + item.itemName + ' (' + item.subtotal + ' RON)'}"></span>
+                <div th:if="${item.customDetails != null}" th:text="${item.customDetails}" style="font-size: 0.85em; color: #666; margin-top: 2px;"></div>
+            </li>
+        </ul>
+
+        <p style="text-align: right; font-size: 1.1em; font-weight: 600; margin: 10px 0 0 0;">
+            Total: <span th:text="${order.totalPrice + ' RON'}"></span>
+        </p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,12 +1,115 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title th:text="${title}">Flower Shop</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Peony Flower Shop</title>
+    <link rel="stylesheet" th:href="@{/css/theme.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
 </head>
 <body>
-	<h1 th:text="${title}">Flower Shop</h1>
-	<p>Fresh bouquets, delivered with love.</p>
+
+
+<nav style="position: absolute; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 18px 30px; flex-wrap: wrap; gap: 15px; background: linear-gradient(to bottom, rgba(0,0,0,0.45), transparent);">
+    <div style="display: flex; gap: 18px; align-items: center; flex-wrap: wrap;">
+        <a th:href="@{/shop}" style="color: white; text-decoration: none; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;">Catalog</a>
+        <a th:href="@{/custom-bouquet}" style="color: white; text-decoration: none; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;">Custom Bouquet</a>
+
+
+        <a sec:authorize="isAuthenticated()" th:href="@{/favorites}" style="color: white; text-decoration: none; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;">♥ Favorites</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/cart}" style="color: white; text-decoration: none; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;">Cart</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/orders}" style="color: white; text-decoration: none; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;">My Orders</a>
+
+
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/flowers}" style="color: #f0cdd6; font-weight: 600; text-decoration: none; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;">Inventory</a>
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/orders}" style="color: #f0cdd6; font-weight: 600; text-decoration: none; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;">Manage Orders</a>
+    </div>
+
+    <div style="display: flex; gap: 10px; align-items: center;">
+
+        <a sec:authorize="isAnonymous()" th:href="@{/login}" class="btn"
+           style="background-color: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 8px 15px; text-transform: uppercase; font-size: 0.8em;">Sign In</a>
+
+
+        <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="margin: 0;">
+            <button type="submit" class="btn"
+                    style="background-color: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 8px 15px; text-transform: uppercase; font-size: 0.8em; cursor: pointer;">Sign Out</button>
+        </form>
+    </div>
+</nav>
+
+
+<header class="hero-section" style="background-image: url('/images/peonies.jpg'); height: 70vh; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; position: relative;">
+    <div style="background-color: rgba(0, 0, 0, 0.25); padding: 40px; border-radius: 8px;">
+        <p style="font-size: 0.9em; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Welcome to</p>
+        <h1 style="font-size: 3.5em; margin: 0 0 15px 0; color: white;">Peony Flower Shop</h1>
+        <p style="font-size: 1.1em; margin-bottom: 25px;">Floral arrangements created with soul and passion for beauty.</p>
+        <a th:href="@{/shop}" class="btn" style="background-color: #f0cdd6; color: #333; padding: 15px 30px; text-transform: uppercase; letter-spacing: 1px;">Discover Collection</a>
+    </div>
+</header>
+
+
+<section sec:authorize="hasRole('ADMIN')" style="padding: 50px 20px 20px 20px; text-align: center; background-color: #fffafb; border-bottom: 1px solid #fae6ec;">
+    <h2 style="font-size: 2em; color: #333; margin-bottom: 8px;">Admin Dashboard</h2>
+    <p style="color: #666; margin-bottom: 35px;">Manage shop stock and customer orders</p>
+
+    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; max-width: 900px; margin: 0 auto 30px auto;">
+        <div style="width: 300px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(219, 179, 192, 0.25); border: 1px solid #f0cdd6;">
+            <h3 style="font-size: 1.2em; color: #333; letter-spacing: 1px; margin-top: 0;">FLOWER INVENTORY</h3>
+            <p style="color: #666; font-size: 0.9em; min-height: 45px;">Add, edit, or delete flowers, prices, and available stock.</p>
+            <a th:href="@{/flowers}" class="btn" style="display: block; width: 100%; box-sizing: border-box;">MANAGE STOCK</a>
+        </div>
+
+        <div style="width: 300px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(219, 179, 192, 0.25); border: 1px solid #f0cdd6;">
+            <h3 style="font-size: 1.2em; color: #333; letter-spacing: 1px; margin-top: 0;">CUSTOMER ORDERS</h3>
+            <p style="color: #666; font-size: 0.9em; min-height: 45px;">View all placed orders, custom bouquets, and update delivery status.</p>
+            <a th:href="@{/admin/orders}" class="btn" style="display: block; width: 100%; box-sizing: border-box;">MANAGE ORDERS</a>
+        </div>
+    </div>
+</section>
+
+<section id="shop" style="padding: 60px 20px; text-align: center;">
+    <h2 style="font-size: 2.2em; color: #333; margin-bottom: 10px;">Our Shop</h2>
+    <p style="color: #666; margin-bottom: 50px;">Choose your desired category</p>
+
+    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto;">
+
+
+        <div style="width: 260px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(219, 179, 192, 0.2);">
+            <div style="height: 180px; background-color: #fae6ec; border-radius: 4px; margin-bottom: 20px;"></div>
+            <h3 style="font-size: 1.15em; color: #333; letter-spacing: 1px;">SINGLE STEMS</h3>
+            <p style="color: #666; font-size: 0.9em; min-height: 50px;">Fresh individual flowers picked daily for simple elegance.</p>
+            <a th:href="@{/shop(category='Single Stem')}" class="btn" style="display: block; width: 100%; box-sizing: border-box; background-color: transparent; border: 1px solid #777; color: #333;">VIEW STEMS</a>
+        </div>
+
+
+        <div style="width: 260px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(219, 179, 192, 0.2);">
+            <div style="height: 180px; background-color: #fae6ec; border-radius: 4px; margin-bottom: 20px;"></div>
+            <h3 style="font-size: 1.15em; color: #333; letter-spacing: 1px;">BOUQUETS</h3>
+            <p style="color: #666; font-size: 0.9em; min-height: 50px;">Ready-to-gift arrangements for the loved ones in your life.</p>
+            <a th:href="@{/shop(category='Bouquet')}" class="btn" style="display: block; width: 100%; box-sizing: border-box; background-color: transparent; border: 1px solid #777; color: #333;">VIEW BOUQUETS</a>
+        </div>
+
+
+        <div style="width: 260px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(219, 179, 192, 0.2);">
+            <div style="height: 180px; background-color: #fae6ec; border-radius: 4px; margin-bottom: 20px;"></div>
+            <h3 style="font-size: 1.15em; color: #333; letter-spacing: 1px;">ARRANGEMENTS</h3>
+            <p style="color: #666; font-size: 0.9em; min-height: 50px;">Elegant floral decorations for special moments and events.</p>
+            <a th:href="@{/shop(category='Floral Arrangement')}" class="btn" style="display: block; width: 100%; box-sizing: border-box; background-color: transparent; border: 1px solid #777; color: #333;">VIEW ARRANGEMENTS</a>
+        </div>
+
+
+        <div style="width: 260px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(219, 179, 192, 0.2); border: 1px solid #f0cdd6;">
+            <div style="height: 180px; background-color: #f0cdd6; border-radius: 4px; margin-bottom: 20px;"></div>
+            <h3 style="font-size: 1.15em; color: #333; letter-spacing: 1px;">CUSTOM BOUQUET</h3>
+            <p style="color: #666; font-size: 0.9em; min-height: 50px;">Choose your favorite stems, wrapping, ribbon, and gift note.</p>
+            <a th:href="@{/custom-bouquet}" class="btn" style="display: block; width: 100%; box-sizing: border-box;">BUILD YOUR OWN</a>
+        </div>
+
+    </div>
+</section>
+
 </body>
 </html>
